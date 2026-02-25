@@ -5,29 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistemas TI | Catálogo Premium</title>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --bg: #050505; --card-bg: #121214; --border: #27272a; --text-main: #ffffff; --text-dim: #a1a1aa; }
+        /* MANTENEMOS TUS VARIABLES Y AGREGAMOS LAS NUEVAS */
+        :root { 
+            --gold: #d4af37; 
+            --naranja: #ff9933;
+            --azul: #002db3;
+            --blanco: #ffffff;
+            --bg: #050505; 
+            --card-bg: #121214; 
+            --border: #27272a; 
+            --text-main: #ffffff; 
+            --text-dim: #a1a1aa; 
+        }
+
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 0; }
+        
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* ESTILO SYNCOPATE PARA EL HEADER */
         header { text-align: center; margin-bottom: 50px; }
-        header h1 { font-size: 2.5rem; font-weight: 800; text-transform: uppercase; margin: 0; }
-        header p { color: var(--gold); font-size: 0.8rem; letter-spacing: 2px; margin-top: 10px; }
+        header h1 { 
+            font-family: 'Syncopate', sans-serif;
+            font-size: 2.2rem; 
+            letter-spacing: 8px;
+            font-weight: 800; 
+            text-transform: uppercase; 
+            margin: 0;
+            background: linear-gradient(135deg, var(--blanco) 50%, var(--naranja) 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        header p { color: var(--naranja); font-size: 0.7rem; font-family: 'Syncopate'; letter-spacing: 4px; margin-top: 15px; }
+
+        /* BUSCADOR ESTILO MENU */
+        .search-container { max-width: 500px; margin: 0 auto 40px; }
+        #buscador {
+            width: 100%;
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: white;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            outline: none;
+            transition: 0.4s;
+        }
+        #buscador:focus { border-color: var(--naranja); box-shadow: 0 0 20px rgba(255,153,51,0.2); }
+
         .filter-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
-        .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 8px 20px; border-radius: 100px; cursor: pointer; transition: 0.3s; }
-        .filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .filter-btn { 
+            background: transparent; 
+            border: 1px solid var(--border); 
+            color: var(--text-dim); 
+            padding: 8px 20px; 
+            border-radius: 100px; 
+            cursor: pointer; 
+            transition: 0.3s;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.5rem;
+        }
+        .filter-btn.active { background: var(--naranja); color: #000; border-color: var(--naranja); }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; transition: 0.5s; }
+        
+        /* EFECTO BLUR DEL MENU A LAS CARDS */
+        .grid:hover .card:not(:hover) { opacity: 0.3; filter: blur(2px); }
+
         .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .card:hover { transform: translateY(-5px); border-color: var(--azul); }
+        
         .img-wrapper { width: 100%; height: 200px; background: #1a1a1c; }
         .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        
         .card-body { padding: 20px; }
-        .cat-tag { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: bold; }
-        .card h3 { margin: 5px 0 10px 0; font-size: 1.2rem; }
-        .card p { color: var(--text-dim); font-size: 0.85rem; height: 40px; overflow: hidden; }
+        .cat-tag { font-family: 'Syncopate', sans-serif; font-size: 0.5rem; color: var(--naranja); text-transform: uppercase; font-weight: bold; letter-spacing: 2px; }
+        .card h3 { margin: 10px 0; font-size: 1.1rem; font-weight: 700; }
+        .card p { color: var(--text-dim); font-size: 0.8rem; height: 40px; overflow: hidden; }
+        
         .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 15px; margin-top: 10px; }
         .price { font-size: 1.4rem; font-weight: 800; }
-        #status-msg { text-align: center; padding: 20px; color: var(--gold); }
+        
+        /* PAGINACIÓN */
+        .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 50px; }
+        .page-btn { 
+            background: transparent; border: 1px solid var(--border); color: white; 
+            width: 40px; height: 40px; border-radius: 10px; cursor: pointer; 
+            font-family: 'Syncopate', sans-serif; font-size: 0.7rem; transition: 0.3s;
+        }
+        .page-btn.active { background: var(--azul); border-color: var(--azul); }
+        .page-btn:hover:not(.active) { border-color: var(--naranja); color: var(--naranja); }
+
+        #status-msg { text-align: center; padding: 20px; color: var(--naranja); font-family: 'Syncopate'; font-size: 0.6rem; }
     </style>
 </head>
 <body>
@@ -36,39 +108,53 @@
         <h1>CATÁLOGO SISTEMAS</h1>
         <p>INFRAESTRUCTURA & TECNOLOGÍA 2026</p>
     </header>
+
+    <div class="search-container">
+        <input type="text" id="buscador" placeholder="BUSCAR PRODUCTO...">
+    </div>
+
     <div class="filter-bar" id="filters"></div>
-    <div id="status-msg">Cargando base de datos...</div>
+    <div id="status-msg">CONECTANDO BASE DE DATOS...</div>
     <div class="grid" id="catalogo"></div>
+    <div class="pagination" id="paginacion"></div>
 </div>
 
 <script>
-    // Tu enlace verificado
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTBEf8TJyNIV7_gl2YoqxoK351sAG2ZDykTnAS-ZIXHXcrjymTjo9aEsDK9_DU4kTQjSCL1Vo1xLi7s/pub?gid=0&single=true&output=csv';
 
     let masterData = [];
+    let filteredData = [];
+    let currentPage = 1;
+    const itemsPerPage = 15;
 
     function init() {
-        // Usamos PapaParse con una configuración de descarga directa
         Papa.parse(CSV_URL, {
             download: true,
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                console.log("Datos:", results.data);
                 masterData = results.data.filter(r => r['Ítem'] || r['Item']);
+                filteredData = [...masterData];
                 
                 if(masterData.length > 0) {
                     document.getElementById('status-msg').style.display = 'none';
                     buildFilters(masterData);
-                    render(masterData);
+                    updateDisplay();
                 } else {
-                    document.getElementById('status-msg').innerText = "⚠️ La hoja está vacía.";
+                    document.getElementById('status-msg').innerText = "⚠️ LA HOJA ESTÁ VACÍA.";
                 }
-            },
-            error: function(err) {
-                document.getElementById('status-msg').innerText = "❌ Error de conexión. Intenta abrirlo en otro navegador.";
             }
         });
+    }
+
+    function updateDisplay() {
+        // Lógica de Paginación
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageItems = filteredData.slice(startIndex, endIndex);
+
+        render(pageItems);
+        renderPagination();
     }
 
     function render(data) {
@@ -78,14 +164,14 @@
             const img = item.Imagen || 'https://via.placeholder.com/400x300/1a1a1c/d4af37?text=Sin+Imagen';
             catalogo.innerHTML += `
                 <div class="card">
-                    <div class="img-wrapper"><img src="${img}" onerror="this.src='https://via.placeholder.com/400x300/1a1a1c/d4af37?text=Cargando...'"></div>
+                    <div class="img-wrapper"><img src="${img}" onerror="this.src='https://via.placeholder.com/400x300/1a1a1c/444?text=Cargando...'"></div>
                     <div class="card-body">
                         <span class="cat-tag">${item['Categoría'] || 'General'}</span>
                         <h3>${item['Ítem']}</h3>
                         <p>${item['Descripción Técnica'] || ''}</p>
                         <div class="card-footer">
                             <div class="price">$${item.Precio || '0'}</div>
-                            <div style="font-size:0.7rem; color:#444">COD: ${item.CODIGO}</div>
+                            <div style="font-size:0.6rem; color:#444; font-family:Syncopate">COD: ${item.CODIGO}</div>
                         </div>
                     </div>
                 </div>`;
@@ -103,11 +189,45 @@
             btn.onclick = (e) => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                render(c === 'Todos' ? masterData : masterData.filter(i => i['Categoría'] === c));
+                currentPage = 1;
+                filteredData = c === 'Todos' ? masterData : masterData.filter(i => i['Categoría'] === c);
+                updateDisplay();
             };
             filterBar.appendChild(btn);
         });
     }
+
+    function renderPagination() {
+        const pagContainer = document.getElementById('paginacion');
+        pagContainer.innerHTML = "";
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+        if (totalPages <= 1) return;
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.innerText = i;
+            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            btn.onclick = () => {
+                currentPage = i;
+                updateDisplay();
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            };
+            pagContainer.appendChild(btn);
+        }
+    }
+
+    // BUSCADOR EN TIEMPO REAL
+    document.getElementById('buscador').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        filteredData = masterData.filter(item => 
+            item['Ítem'].toLowerCase().includes(term) || 
+            (item['Categoría'] && item['Categoría'].toLowerCase().includes(term))
+        );
+        currentPage = 1;
+        updateDisplay();
+    });
+
     window.onload = init;
 </script>
 </body>
